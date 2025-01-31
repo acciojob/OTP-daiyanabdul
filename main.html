@@ -1,142 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>I'm not a robot</title>
-    <link rel="stylesheet" href="styles.css" />
-	  <style>
-		  .img1 {
-  content: url("https://picsum.photos/id/237/200/300");
+
+<html>
+
+<head>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		#verification_heading {
+    text-align: center;
+    margin-top: 20px;
 }
 
-.img2 {
-  content: url("https://picsum.photos/seed/picsum/200/300");
+#verification_subtext {
+    text-align: center;
+    margin-top: 10px;
 }
 
-.img3 {
-  content: url("https://picsum.photos/200/300?grayscale");
-}
-.img4 {
-  content: url("https://picsum.photos/200/300/");
-}
-.img5 {
-  content: url("https://picsum.photos/200/300.jpg");
+.code-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-img {
-  margin: 10px;
-  border: 5px solid #555;
-  width: 10%;
+.code {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+    margin: 5px;
+    border: 2px solid #000;
 }
 
-.flex {
-  display: flex;
-  justify-content: center;
-}
+	</style>
+</head>
 
-.selected {
-  border: 5px solid rgb(0, 195, 255);
-}
+<body>
+	<h1 id="verification_heading">Verify Your Account</h1>
+    <p id="verification_subtext">Please enter the 6-digit code sent to your device</p>
+    <div class="code-container">
+        <input type="text" id="code-1" class="code" maxlength="1">
+        <input type="text" id="code-2" class="code" maxlength="1">
+        <input type="text" id="code-3" class="code" maxlength="1">
+        <input type="text" id="code-4" class="code" maxlength="1">
+        <input type="text" id="code-5" class="code" maxlength="1">
+        <input type="text" id="code-6" class="code" maxlength="1">
+    </div>
+	<!-- the entire body must be written by student -->
+    <script type="text/javascript" src="./script.js">
+		const inputs = document.querySelectorAll('.code');
 
-p {
-  text-align: center;
-}
-
-button {
-  margin: 20px;
-}
-
-	  </style>
-  </head>
-  <body>
-    <main>
-       <h3 id="h">Please click on the identical tiles to verify that you are not a robot.</h3>
-        <div id="image-container" class="flex"></div>
-        <p id="para" style="display: none;"></p>
-        <button id="reset" style="display: none;">Reset</button>
-        <button id="verify" style="display: none;">Verify</button>
-    </main>
-    <script src="./script.js">
-		
-   const images = [
-    'img1',
-    'img2',
-    'img3',
-    'img4',
-    'img5'
-   ];
-
-   function generateImages(){
-    var selectedImageIndex = Math.floor(Math.random()*images.length); //1 , 4,2,3, 0,5
-    var selectedImage = images[selectedImageIndex];
-    var allImages = images.concat(selectedImage);
-    var shuffledImages = allImages.sort(function(){
-        return 0.5 - Math.random();
+inputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+        if (input.value !== '') {
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        }
     });
 
-    
-    var imageContainer = document.getElementById('image-container');
-    imageContainer.innerHTML = '';
-    for(var index = 0; index < shuffledImages.length; index++){
-        var imgClass = shuffledImages[index];
-        var img = document.createElement('img');
-        img.className = imgClass;
-        img.dataset.index = index;
-        img.addEventListener('click', handleImageClick);
-        imageContainer.appendChild(img);
-    }
-   }
-
-   let firstClick = null;
-   let secondClick = null;
-
-   function handleImageClick(event){
-    const clickedImage = event.target;
-    if(firstClick == clickedImage || secondClick == clickedImage ) return;
-
-    document.getElementById('reset').style.display = 'block';
-
-    if(!firstClick) {
-        firstClick = clickedImage;
-        clickedImage.classList.add('selected');
-    }else if(!secondClick){
-        secondClick = clickedImage;
-        clickedImage.classList.add('selected');
-        document.getElementById('verify').style.display = 'block';
-    }
-
-    
-   }
-
-   function reset(){
-    firstClick = null;
-    secondClick = null;
-    document.getElementById('reset').style.display = 'none';
-    document.getElementById('verify').style.display = 'none';
-    document.getElementById('para').style.display = 'none';
-    document.getElementById('image-container').innerHTML = '';
-    generateImages();
-   }
-
-   function verify(){
-    if(firstClick && secondClick){
-        if(firstClick.src === secondClick.src){
-            document.getElementById('para').innerHTML = 'Verified';
-
-        }else{
-            document.getElementById('para').innerHTML = 'Not a human';
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && index > 0 && input.value === '') {
+            inputs[index - 1].focus();
         }
+    });
+});
 
-        document.getElementById('para').style.display = 'block';
-        document.getElementById('verify').style.display = 'none';
-    }
-   }
-   document.getElementById('reset').addEventListener('click', reset);
-   document.getElementById('verify').addEventListener('click', verify);
+inputs[0].focus();
 
-   generateImages();
 	</script>
-  </body>
+
+</body>
+
 </html>
